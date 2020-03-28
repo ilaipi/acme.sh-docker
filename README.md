@@ -30,3 +30,37 @@ docker-compose exec acme1 acme.sh --issue --dns dns_ali -d '*.xxxxxxx.com' --sta
 # 因为acme和nginx分属两个container，所以--reloadcmd "service nginx force-reload"是无效的
 docker-compose exec acme1 acme.sh --installcert -d '*.xxxxxxx.com' --key-file /etc/nginx/ssl/*.xxxxxxx.com.key  --fullchain-file /etc/nginx/ssl/*.xxxxxxx.com.fullchain.cer  --reloadcmd "echo success"
 ```
+
+安装后`/data/nginx`目录的内容如下：
+
+```
+├── acme1 // 容器工作目录
+│   ├── *.xxxxxxx.com // 生成的域名证书目录
+│   │   ├── *.xxxxxxx.com.cer
+│   │   ├── *.xxxxxxx.com.conf
+│   │   ├── *.xxxxxxx.com.csr
+│   │   ├── *.xxxxxxx.com.csr.conf
+│   │   ├── *.xxxxxxx.com.key
+│   │   ├── backup
+│   │   │   ├── fullchain.bak
+│   │   │   └── key.bak
+│   │   ├── ca.cer
+│   │   └── fullchain.cer
+│   ├── account.conf
+│   ├── ca
+│   │   └── acme-v02.api.letsencrypt.org
+│   │       ├── account.json
+│   │       ├── account.key
+│   │       └── ca.conf
+│   └── http.header
+├── log
+│   ├── access.log
+│   └── error.log
+├── nginx.conf
+├── sites-enabled
+│   ├── site1
+├── ssl // 安装的证书目录，可直接挂载到nginx容器使用
+│   ├── *.xxxxxxx.com.fullchain.cer
+│   └── *.xxxxxxx.com.key
+└── ssl_params
+```
