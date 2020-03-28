@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+   nginx:
+     image: nginx:stable-alpine
+     container_name: nginx
+     volumes:
+        - /data/nginx/nginx.conf:/etc/nginx/nginx.conf
+        - /data/nginx/ssl_params:/etc/nginx/ssl_params
+        - /data/nginx/sites-enabled:/etc/nginx/sites-enabled
+        - /data/nginx/ssl:/etc/nginx/ssl
+        - /data/nginx/log:/var/log/nginx
+     ports:
+        - "80:80"
+        - "443:443"
+     restart: always
+   acme1:
+     image: neilpang/acme.sh
+     container_name: acme1
+     network_mode: "host"
+     command: ["daemon"]
+     volumes:
+        - /data/nginx/acme1:/acme.sh
+        - /data/nginx/ssl:/etc/nginx/ssl
+     environment:
+        - "Ali_Key=${acme1_ALI_KEY}"
+        - "Ali_Secret=${acme1_ALI_SECRET}"
+     restart: always
+   acme2:
+     image: neilpang/acme.sh
+     container_name: acme2
+     network_mode: "host"
+     command: ["daemon"]
+     volumes:
+        - /data/nginx/acme2:/acme.sh
+        - /data/nginx/ssl:/etc/nginx/ssl
+     environment:
+        - "Ali_Key=${acme2_ALI_KEY}"
+        - "Ali_Secret=${acme2_ALI_SECRET}"
+     restart: always

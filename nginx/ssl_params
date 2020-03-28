@@ -1,0 +1,9 @@
+ssl_session_cache shared:SSL:10m;
+ssl_session_timeout 5m;
+
+# Enable server-side protection against BEAST attacks
+ssl_prefer_server_ciphers on;
+ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+
+# Disable SSLv3
+ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
